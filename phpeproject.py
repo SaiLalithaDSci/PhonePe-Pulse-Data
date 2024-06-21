@@ -285,17 +285,21 @@ def AggUser_Brand_ST(df,state):
                 title=f"{state.upper()} BRAND WISE USER COUNT")
     st.plotly_chart(fig1)
 
+# MAP ANALYSIS
+# MAP INSURANCE
 def Map_User_Tran_Y(df,year):
     map1=df[df['Years']==year]
     map1.reset_index(drop=True,inplace=True)
     map1G=map1.groupby('States')[['User_Count','Transaction_Amount']].sum()
     map1G.reset_index(inplace=True)
-
-    Mfig1=px.bar(data_frame=map1G, x='States',y='User_Count',title=f"{year} STATE WISE USER COUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig1.show()
-
-    Mfig2=px.bar(data_frame=map1G, x='States',y='Transaction_Amount',title=f"{year} STATE WISE TRANSACTION AMOUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig2.show()
+    
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame=map1G, x='States',y='User_Count',title=f"{year} STATE WISE USER COUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame=map1G, x='States',y='Transaction_Amount',title=f"{year} STATE WISE TRANSACTION AMOUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
 
     return map1
 
@@ -304,38 +308,47 @@ def Map_User_Tran_Q(df,quarter):
     map2.reset_index(drop=True,inplace=True)
     map2G=map2.groupby('States')[['User_Count','Transaction_Amount']].sum()
     map2G.reset_index(inplace=True)
+    
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame=map2G, x='States',y='User_Count',title=f"QUARTER - {quarter} STATE WISE USER COUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame=map2G, x='States',y='Transaction_Amount',title=f"QUARTER - {quarter} STATE WISE TRANSACTION AMOUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
 
-    Mfig1=px.bar(data_frame=map2G, x='States',y='User_Count',title=f"{quarter} STATE WISE USER COUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig1.show()
+    return map2
 
-    Mfig2=px.bar(data_frame=map2G, x='States',y='Transaction_Amount',title=f"{quarter} STATE WISE TRANSACTION AMOUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig2.show()
+def Map_User_Tran_DisY(df,state):
+    map5=df[df['States']==state]
+    map5.reset_index(drop=True,inplace=True)
 
-def Map_User_Tran_DisY(df,year,district):
-    map3=df[df['Years']==year]
-    map3.reset_index(drop=True,inplace=True)
-    map3G=map3.groupby('Districts')[['User_Count','Transaction_Amount']].sum()
-    map3G.reset_index(inplace=True)
+    map5G=map5.groupby('Districts')[['User_Count','Transaction_Amount']].sum()
+    map5G.reset_index(inplace=True)
 
-    Mfig1=px.bar(data_frame=map3G, x='Districts',y='User_Count',title=f"{year} {district.upper()} WISE USER COUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig1.show()
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame=map5G, x='Districts',y='User_Count',title=f"{state.upper()} DISTRICT WISE USER COUNT FOR ABOVE YEAR",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame=map5G, x='Districts',y='Transaction_Amount',title=f"{state.upper()} DISTRICT WISE TRANSACTION AMOUNT FOR ABOVE YEAR",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
 
-    Mfig2=px.bar(data_frame=map3G, x='Districts',y='Transaction_Amount',title=f"{year} {district.upper()} WISE TRANSACTION AMOUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig2.show()
+def Map_User_Tran_DisQ(df,state):
 
-    return map3
+    map6=df[df['States']==state]
+    map6.reset_index(drop=True,inplace=True)
 
-def Map_User_Tran_DisQ(df,quarter,district):
-    map4=df[df['Quarter']==quarter]
-    map4.reset_index(drop=True,inplace=True)
-    map4G=map4.groupby('Districts')[['User_Count','Transaction_Amount']].sum()
-    map4G.reset_index(inplace=True)
+    map6G=map6.groupby('Districts')[['User_Count','Transaction_Amount']].sum()
+    map6G.reset_index(inplace=True)
 
-    Mfig1=px.bar(data_frame=map4G, x='Districts',y='User_Count',title=f"{quarter} {district.upper()} WISE USER COUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig1.show()
-
-    Mfig2=px.bar(data_frame=map4G, x='Districts',y='Transaction_Amount',title=f"{quarter} {district.upper()} WISE TRANSACTION AMOUNT",color_discrete_sequence=px.colors.sequential.Rainbow_r)
-    Mfig2.show()
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame=map6G, x='Districts',y='User_Count',title=f"{state.upper()} DISTRICT WISE USER COUNT FOR ABOVE QUARTER",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame=map6G, x='Districts',y='Transaction_Amount',title=f"{state.upper()} DISTRICT WISE TRANSACTION AMOUNT FOR ABOVE QUARTER",color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
 
 #streamlit code
 st.set_page_config(layout ="wide")
@@ -426,10 +439,54 @@ elif select =="DATA EXPLORATION":
         M_method=st.radio("Select the Method!",["MAP INSURANCE ANALYSIS","MAP TRANSACTION ANALYSIS","MAP USER ANALYSIS"])
 
         if M_method=="MAP INSURANCE ANALYSIS":
-            pass
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every State!")
+                years1=st.slider("Select a year to Analyse!", Map_Insurance['Years'].min(), Map_Insurance['Years'].max(), Map_Insurance['Years'].min())
+            Map_Ins_Y=Map_User_Tran_Y(Map_Insurance,years1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every District!")
+                state=st.selectbox("Select a State to Analyse! ", Map_Ins_Y['States'].unique().tolist())
+            Map_User_Tran_DisY(Map_Ins_Y,state)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Quarter Wise Transaction Amount & User Count Analysis on Every State!")
+                quarters1=st.slider("Select a Quarter to Analyse!", Map_Ins_Y['Quarter'].min(), Map_Ins_Y['Quarter'].max(), Map_Ins_Y['Quarter'].min())
+            Map_Ins_Q=Map_User_Tran_Q(Map_Ins_Y,quarters1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Quarter Wise Transaction Amount & User Count Analysis on Every District!")
+                state=st.selectbox("Select a State to Analyse the Quarter! ", Map_Ins_Y['States'].unique().tolist())
+            Map_User_Tran_DisQ(Map_Ins_Q,state)
 
         elif M_method=="MAP TRANSACTION ANALYSIS":
-            pass
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every State!")
+                years1=st.slider("Select a year to Analyse!", Map_Transaction['Years'].min(), Map_Transaction['Years'].max(), Map_Transaction['Years'].min())
+            Map_Tran_Y=Map_User_Tran_Y(Map_Transaction,years1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every District!")
+                state=st.selectbox("Select a State to Analyse! ", Map_Tran_Y['States'].unique().tolist())
+            Map_User_Tran_DisY(Map_Tran_Y,state)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Quarter Wise Transaction Amount & User Count Analysis on Every State!")
+                quarters1=st.slider("Select a Quarter to Analyse!", Map_Tran_Y['Quarter'].min(), Map_Tran_Y['Quarter'].max(), Map_Tran_Y['Quarter'].min())
+            Map_Tran_Q=Map_User_Tran_Q(Map_Tran_Y,quarters1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Quarter Wise Transaction Amount & User Count Analysis on Every District!")
+                state=st.selectbox("Select a State to Analyse the Quarter! ", Map_Tran_Y['States'].unique().tolist())
+            Map_User_Tran_DisQ(Map_Tran_Q,state)
 
         elif M_method=="MAP USER ANALYSIS":
             pass
