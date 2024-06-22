@@ -350,15 +350,399 @@ def Map_User_Tran_DisQ(df,state):
         Mfig2=px.bar(data_frame=map6G, x='Districts',y='Transaction_Amount',title=f"{state.upper()} DISTRICT WISE TRANSACTION AMOUNT FOR ABOVE QUARTER",color_discrete_sequence=px.colors.sequential.Rainbow_r)
         st.plotly_chart(Mfig2)
 
+#Map User
+def Map_User_UC_AO_Y(df,year):
+
+    map1=df[df['Years']==year]
+    map1.reset_index(drop=True,inplace=True)
+
+    map1G=map1.groupby('States')[['User_Count','App_Opens']].sum()
+    map1G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame= map1G, x="States", y="User_Count",
+                    title=f"{year} STATE WISE USER COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame= map1G, x="States", y="App_Opens",
+                    title=F"{year} STATE WISE APP OPENS COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
+
+    return map1
+
+def Map_User_UC_AO_Q(df,quarter):
+
+    map2=df[df['Quarter']==quarter]
+    map2.reset_index(drop=True,inplace=True)
+
+    map2G=map2.groupby('States')[['User_Count','App_Opens']].sum()
+    map2G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame=map2G, x="States", y="User_Count",
+                    title="QUARTER STATE WISE USER COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame=map2G, x="States", y="App_Opens",
+                    title="QUARTER STATE WISE APP OPENS COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
+
+    return map2
+
+def Map_User_UC_AO_DY(df,state):
+
+    map3=df[df['States']==state]
+    map3.reset_index(drop=True,inplace=True)
+
+    map3G=map3.groupby('Districts')[['User_Count','App_Opens']].sum()
+    map3G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame=map3G, x="Districts", y="User_Count",
+                    title="DISTRICT WISE USER COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame=map3G, x="Districts", y="App_Opens",
+                    title="DISTRICT WISE APP OPENS COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
+
+def Map_User_UC_AO_DQ(df,state):
+
+    map4=df[df['States']==state]
+    map4.reset_index(drop=True,inplace=True)
+
+    map4G=map4.groupby('Districts')[['User_Count','App_Opens']].sum()
+    map4G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Mfig1=px.bar(data_frame=map4G, x="Districts", y="User_Count",
+                    title="QUARTER DISTRICT WISE USER COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig1)
+    with col2:
+        Mfig2=px.bar(data_frame=map4G, x="Districts", y="App_Opens",
+                    title="QUARTER DISTRICT WISE APP OPENS COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Mfig2)
+
+#TOP ANALYSIS
+#top transaction and top insurance
+def Top_UC_TA_Y(df,year):
+
+    top1=df[df['Years']==year]
+    top1.reset_index(drop=True,inplace=True)
+
+    top1G=top1.groupby('States')[['User_Count','Transaction_Amount']].sum()
+    top1G.reset_index(inplace=True)
+    
+    col1,col2=st.columns(2)
+    with col1:
+        Tfig1=px.bar(data_frame=top1G, x="States", y="User_Count", title=f"{year} STATE WISE USER COUNT", color="User_Count", color_continuous_scale="Rainbow")
+        st.plotly_chart(Tfig1)
+    with col2:
+        Tfig2=px.bar(data_frame=top1G, x="States", y="Transaction_Amount", title=f"{year} STATE WISE TRANSACTION AMOUNT", color="Transaction_Amount", color_continuous_scale="Rainbow")
+        st.plotly_chart(Tfig2)
+
+    url="https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson"
+    response=requests.get(url)
+    data1=json.loads(response.content)
+    state_name=[]
+    for feature in data1['features']:
+        state_name.append(feature['properties']['ST_NM'])
+
+    state_name.sort()
+
+    with col1:
+        fig_india_1=px.choropleth(top1G, geojson=data1, locations="States", featureidkey="properties.ST_NM",
+                                color="User_Count", color_continuous_scale="Rainbow",
+                                range_color=(top1G["User_Count"].min(),top1G["User_Count"].max()),
+                                hover_name="States", title=f"{year} USER COUNT", fitbounds="locations")
+        fig_india_1.update_geos(visible=False)
+        st.plotly_chart(fig_india_1)
+    with col2:
+        fig_india_2=px.choropleth(top1G, geojson=data1, locations="States", featureidkey="properties.ST_NM",
+                                color="Transaction_Amount", color_continuous_scale="Rainbow",
+                                range_color=(top1G["Transaction_Amount"].min(),top1G["Transaction_Amount"].max()),
+                                hover_name="States", title=f"{year} TRANSACTION AMOUNT", fitbounds="locations")
+        fig_india_2.update_geos(visible=False)
+        st.plotly_chart(fig_india_2)
+
+    return top1
+
+def Top_UC_TA_Q(df,quarter):
+
+    top2=df[df['Quarter']==quarter]
+    top2.reset_index(drop=True,inplace=True)
+
+    top2G=top2.groupby('States')[['User_Count','Transaction_Amount']].sum()
+    top2G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Tfig1=px.bar(data_frame=top2G, x="States", y="User_Count", title=f"{quarter} QUARTER STATE WISE USER COUNT", color="User_Count", color_continuous_scale="Rainbow")
+        st.plotly_chart(Tfig1)
+    with col2:
+        Tfig2=px.bar(data_frame=top2G, x="States", y="Transaction_Amount", title=f"{quarter} QUARTER STATE WISE TRANSACTION AMOUNT",color="Transaction_Amount", color_continuous_scale="Rainbow")
+        st.plotly_chart(Tfig2)
+
+    url="https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson"
+    response=requests.get(url)
+    data1=json.loads(response.content)
+    state_name=[]
+    for feature in data1['features']:
+        state_name.append(feature['properties']['ST_NM'])
+
+    state_name.sort()
+
+    with col1:
+        fig_india_1=px.choropleth(top2G, geojson=data1, locations="States", featureidkey="properties.ST_NM",
+                                color="User_Count", color_continuous_scale="Rainbow",
+                                range_color=(top2G["User_Count"].min(),top2G["User_Count"].max()),
+                                hover_name="States", title=f"{quarter} QUARTER USER COUNT", fitbounds="locations")
+        fig_india_1.update_geos(visible=False)
+        st.plotly_chart(fig_india_1)
+    with col2:
+        fig_india_2=px.choropleth(top2G, geojson=data1, locations="States", featureidkey="properties.ST_NM",
+                                color="Transaction_Amount", color_continuous_scale="Rainbow",
+                                range_color=(top2G["Transaction_Amount"].min(),top2G["Transaction_Amount"].max()),
+                                hover_name="States", title=f"{quarter} QUARTER TRANSACTION AMOUNT", fitbounds="locations")
+        fig_india_2.update_geos(visible=False)
+        st.plotly_chart(fig_india_2)
+
+
+def Top_Pin_UC_TA_Y(df,state):
+
+    top3=df[df['States']==state]
+    top3.reset_index(drop=True,inplace=True)
+
+    top3G=top3.groupby('Pincodes')[['User_Count','Transaction_Amount']].sum()
+    top3G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Tfig1=px.pie(data_frame=top3G, names="Pincodes", values="User_Count", hole=0.35,
+                    title=f"{state.upper()} PINCODE WISE USER COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Tfig1)
+    with col2:
+        Tfig2=px.pie(data_frame=top3G, names="Pincodes", values="Transaction_Amount", hole=0.35,
+                    title=f"{state.upper()} PINCODE WISE TRANSACTION AMOUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Tfig2)
+
+    return top3
+
+def Top_Pin_UC_TA_Q(df,quarter):
+
+    top4=df[df['Quarter']==quarter]
+    top4.reset_index(drop=True,inplace=True)
+
+    top4G=top4.groupby('Pincodes')[['User_Count','Transaction_Amount']].sum()
+    top4G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Tfig1=px.pie(data_frame=top4G, names="Pincodes", values="User_Count", hole=0.35,
+                    title=f"QUARTER {quarter}, PINCODE WISE USER COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Tfig1)
+    with col2:
+        Tfig2=px.pie(data_frame=top4G, names="Pincodes", values="Transaction_Amount", hole=0.35,
+                    title=f"QUARTER {quarter}, PINCODE WISE TRANSACTION AMOUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+        st.plotly_chart(Tfig2)
+
+#top user
+def Top_User_RU_Y(df,year):
+
+    top5=df[df['Years']==year]
+    top5.reset_index(drop=True,inplace=True)
+
+    top5G=top5.groupby('States')[['Pincode_Wise_Registered_Users']].sum()
+    top5G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Tfig1=px.bar(data_frame=top5G, x="States", y="Pincode_Wise_Registered_Users",
+                title=f"{year} STATE WISE REGISTERED USERS", color="Pincode_Wise_Registered_Users",
+                color_continuous_scale="Rainbow")
+        st.plotly_chart(Tfig1)
+
+    url="https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson"
+    response=requests.get(url)
+    data1=json.loads(response.content)
+    state_name=[]
+    for feature in data1['features']:
+        state_name.append(feature['properties']['ST_NM'])
+
+    state_name.sort()
+    with col2:
+        Tfig2=px.choropleth(top5G, geojson=data1, locations="States", featureidkey="properties.ST_NM",
+                            color="Pincode_Wise_Registered_Users", color_continuous_scale="Rainbow",
+                            range_color=(top5G["Pincode_Wise_Registered_Users"].min(),top5G["Pincode_Wise_Registered_Users"].max()),
+                            hover_name="States", title=f"{year} STATE WISE REGISTERED USERS", fitbounds="locations")
+        Tfig2.update_geos(visible=False)
+        st.plotly_chart(Tfig2)
+
+    return top5
+
+def Top_User_RU_Q(df,quarter):
+
+    top6=df[df['Quarter']==quarter]
+    top6.reset_index(drop=True,inplace=True)
+
+    top6G=top6.groupby('States')[['Pincode_Wise_Registered_Users']].sum()
+    top6G.reset_index(inplace=True)
+
+    col1,col2=st.columns(2)
+    with col1:
+        Tfig1=px.bar(data_frame=top6G, x="States", y="Pincode_Wise_Registered_Users",
+                title=f"QUARTER {quarter}, STATE WISE REGISTERED USERS", color="Pincode_Wise_Registered_Users",
+                color_continuous_scale="Rainbow")
+        st.plotly_chart(Tfig1)
+
+    url="https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson"
+    response=requests.get(url)
+    data1=json.loads(response.content)
+    state_name=[]
+    for feature in data1['features']:
+        state_name.append(feature['properties']['ST_NM'])
+
+    state_name.sort()
+    with col2:
+        Tfig2=px.choropleth(top6G, geojson=data1, locations="States", featureidkey="properties.ST_NM",
+                            color="Pincode_Wise_Registered_Users", color_continuous_scale="Rainbow",
+                            range_color=(top6G["Pincode_Wise_Registered_Users"].min(),top6G["Pincode_Wise_Registered_Users"].max()),
+                            hover_name="States", title=f"QUARTER {quarter}, STATE WISE REGISTERED USERS", fitbounds="locations")
+        Tfig2.update_geos(visible=False)
+        st.plotly_chart(Tfig2)
+
+def Top_User_Pin_Y(df,state):
+
+    top7=df[df['States']==state]
+    top7.reset_index(drop=True,inplace=True)
+
+    top7G=top7.groupby('Pincodes')[['Pincode_Wise_Registered_Users']].sum()
+    top7G.reset_index(inplace=True)
+
+    Tfig1=px.pie(data_frame=top7G, names="Pincodes", values="Pincode_Wise_Registered_Users", hole=0.35,
+                title=f"{state} PINCODE WISE REGISTERED USERS COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+    st.plotly_chart(Tfig1)
+
+    return top7
+
+def Top_User_Pin_Q(df,quarter):
+    top8=df[df['Quarter']==quarter]
+    top8.reset_index(drop=True,inplace=True)
+
+    top8G=top8.groupby('Pincodes')[['Pincode_Wise_Registered_Users']].sum()
+    top8G.reset_index(inplace=True)
+
+    Tfig1=px.pie(data_frame=top8G, names="Pincodes", values="Pincode_Wise_Registered_Users", hole=0.35,
+                title=f"QUARTER {quarter}, PINCODE WISE REGISTERED USERS COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
+    st.plotly_chart(Tfig1)
+
+
 #streamlit code
 st.set_page_config(layout ="wide")
 st.title("PHONEPE DATA VISUALIZATION")
 with st.sidebar:
-    select=option_menu("EXPLORE",["HOME","DATA EXPLORATION","TOP CHARTS"])
+    select=option_menu("CONTENTS",["HOME","DATA EXPLORATION","TOP CHARTS"])
 
 if select =="HOME":
-    Htab1,Htab2,Htab3,Htab4,Htabe5=st.tabs(["ABOUT","PHONPE","DATA ANALYSIS","DATA VISUALIZATION","REFERENCES"])
+    Htab1,Htab2,Htab3,Htab4=st.tabs(["ABOUT","PHONPE","DATA ANALYSIS","DATA VISUALIZATION"])
 
+    with Htab1:
+
+        st.header("INTRODUCTION")
+        st.write("Welcome to the PhonePe Pulse Data Visualization and Exploration Project!")
+        st.write("This capstone project aims to provide an in-depth analysis and visualization of transaction data from PhonePe, a leading digital payments platform in India.") 
+        st.write("By leveraging the comprehensive data available through PhonePe Pulse, we aim to uncover meaningful insights, trends, and patterns in digital transactions across different regions and time periods.")
+
+        st.header("ABOUT THIS PROJECT")
+        st.write("This project focuses on analyzing three main types of data from PhonePe Pulse:")
+        st.write("**Aggregated Data:** Overall transaction metrics aggregated over various dimensions such as time, geography, and user demographics.")
+        st.write("**Map Data:** Geographic distribution of transactions, visualized on interactive maps to highlight regional trends and patterns.")
+        st.write("**Top Data:** Top transaction categories, merchants, and other key entities driving the highest volumes and values of transactions.")
+        st.write("We employ PostgreSQL for data storage and querying, Python scripting for data manipulation, Plotly for creating interactive charts, and Streamlit for building a user-friendly web application.")
+
+        st.header("WHY THIS PROJECT?")
+        st.write("Digital payments have revolutionized the financial landscape, especially in a diverse and rapidly growing market like India. PhonePe, as one of the major players in this sector, generates vast amounts of transaction data that can offer valuable insights into consumer behavior, economic trends, and the impact of digital financial services.")
+        st.write("This project is undertaken to:")
+        st.write("Highlight the significance of digital transaction data.")
+        st.write("Demonstrate the use of data analysis techniques.")
+        st.write("Present the findings in a visually appealing and interactive manner.")
+
+        st.header("KEY TAKEAWAYS OF THIS PROJECT")
+        st.write("By the end of this project, I have gained insights into:")
+        st.write("**Python Scripting:** Manipulating and processing data for analysis.")
+        st.write("**PostgreSQL:** Efficiently storing and querying large datasets.")
+        st.write("**Plotly Charts:** Creating interactive and visually compelling data visualizations.")
+        st.write("**Streamlit:** Building an interactive and user-friendly data application.")
+        st.write("These tools and techniques combined provide a powerful framework for turning raw data into actionable insights, facilitating better decision-making and understanding of digital payment trends.")
+    
+    with Htab2:
+        st.header("WHAT IS PHONEPE?")
+        st.write("PhonePe is a leading digital payments platform in India, offering a seamless and secure way to transfer money, pay bills, recharge mobile phones, and make purchases both online and offline. Launched in December 2015, PhonePe has quickly become one of the most popular payment apps in the country, leveraging the Unified Payments Interface (UPI) system for fast and reliable transactions.")
+
+        st.header("OVERVIEW")
+        st.write("**Founding Year:** 2015")
+        st.write("**Founders:** Sameer Nigam, Rahul Chari, and Burzin Engineer")
+        st.write("**Headquarters:** Bangalore, India")
+        st.write("**Services:** UPI-based money transfers, bill payments, recharges, online shopping, and more")
+        st.write("**User Base:** Over 300 million registered users")
+        st.write("**Merchant Base:** Over 25 million merchants accepting PhonePe across India")
+
+        st.header("INDIA TRENDS")
+        st.markdown("**PhonePe has significantly influenced digital payment trends in India:**")
+        st.write("**Growth in Digital Transactions:** With increasing smartphone penetration and internet access, PhonePe has facilitated a massive surge in digital transactions.")
+        st.write("**Geographic Penetration:** Initially more popular in urban areas, PhonePe is now seeing rapid adoption in rural and semi-urban regions.")
+        st.write("**Transaction Volumes and Values:** Consistently high transaction volumes and values, especially during peak periods like festivals and sales events.")
+        st.write("**User Demographics:** Wide-ranging user demographics, from young tech-savvy individuals to older adults adapting to digital payments.")
+
+        st.header("WHY PHONEPE BUT NOT OTHER PLATFORMS?")
+        st.markdown("**PhonePe stands out among other digital payment platforms for several reasons:**")
+        st.write("**UPI Integration:** Early and seamless integration with UPI, ensuring fast and secure transactions.")
+        st.write("**User-Friendly Interface:** Intuitive design and easy navigation make it accessible to a broad audience.")
+        st.write("**Comprehensive Services:** Beyond payments, PhonePe offers a range of financial services, including mutual funds, insurance, and gold purchases.")
+        st.write("**Extensive Merchant Network:** A vast and growing network of merchants accepting PhonePe, making it convenient for users to pay across various scenarios.")
+        st.write("**Innovative Features:** Continuous innovation with features like PhonePe Switch, PhonePe ATM, and contextual offers and discounts.")
+        st.write("These factors contribute to PhonePe's dominant position in the digital payments landscape in India, making it a preferred choice over other platforms.")
+
+    
+    with Htab3:
+        st.header("OVERVIEW")
+        st.write("In this section, we perform a detailed analysis of PhonePe transaction data, focusing on yearly and quarterly trends as well as state and district-wise distributions. This will provide insights into the geographic and temporal dynamics of digital payments in India.")
+
+        st.header("YEARLY AND QUARTERLY ANALYSIS")
+        st.markdown("")
+        st.markdown("**Yearly Transaction Volume and Value:**")
+        st.write("Analysis of total transaction volumes and values on a yearly basis.")
+        st.write("Identification of growth patterns and significant changes over the years.")
+        st.write("Visualization of yearly trends using bar charts and map.")
+        st.markdown("")
+        st.write("**Quarterly Transaction Volume and Value:**")
+        st.write("Breakdown of transaction data into quarterly segments.")
+        st.write("Comparison of each quarter within a year and across different years.")
+        st.write("Visualization of quarterly trends using bar charts and map.")
+
+        st.header("STATE AND DISTRICT ANALYSIS")
+        st.markdown("")
+        st.markdown("**State-wise Transaction Data:**")
+        st.write("Analysis of transaction volumes and values across different states.")
+        st.write("Identification of top-performing states in terms of digital payment adoption.")
+        st.write("Visualization using choropleth maps to show transaction density and distribution.")
+        st.markdown("")
+        st.markdown("**District-wise Transaction Data:**")
+        st.write("Detailed analysis of transaction data at the district level within states.")
+        st.write("Identification of districts with high and low transaction volumes.")
+        st.write("Visualization using pie charts to illustrate the proportion of transactions in each district within a state.")
+
+    with Htab4:
+        st.header("TYPES OF CHARTS USED")
+        st.write("For each analysis area, we will use various data visualization techniques to present the findings clearly and interactively:")
+        st.write("**Line Charts:** To show yearly and quarterly trends over time.")
+        st.write("**Bar Charts:** To compare transaction volumes and values across different periods.")
+        st.write("**Pie Charts:** To illustrate the proportion of transactions in each district within a state, highlighting district-wise distributions.")
+        st.write("**Choropleth Maps:** To visualize state-wise transaction density.")
 
 elif select =="DATA EXPLORATION":
     tab1, tab2, tab3 =st.tabs(["AGGREGATED ANALYIS","MAP ANALYSIS","TOP ANALYSIS"])
@@ -489,19 +873,108 @@ elif select =="DATA EXPLORATION":
             Map_User_Tran_DisQ(Map_Tran_Q,state)
 
         elif M_method=="MAP USER ANALYSIS":
-            pass
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Year Wise User Count & App Opens Count Analysis on Every State!")
+                years1=st.slider("Select a year to Analyse!", Map_User['Years'].min(), Map_User['Years'].max(), Map_User['Years'].min())
+            Map_User_Y=Map_User_UC_AO_Y(Map_User,years1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Year Wise User Count & App Opens Count Analysis on Every District!")
+                state=st.selectbox("Select a State to Analyse! ", Map_User_Y['States'].unique().tolist())
+            Map_User_UC_AO_DY(Map_User_Y,state)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Quarter Wise User Count & App Opens Count Analysis on Every State!")
+                quarters1=st.slider("Select a Quarter to Analyse!", Map_User_Y['Quarter'].min(), Map_User_Y['Quarter'].max(), Map_User_Y['Quarter'].min())
+            Map_User_Q=Map_User_UC_AO_Q(Map_User_Y,quarters1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Mcap=st.write("Quarter Wise User Count App Opens Count Analysis on Every District!")
+                state=st.selectbox("Select a State to Analyse the Quarter! ", Map_User_Y['States'].unique().tolist())
+            Map_User_UC_AO_DQ(Map_User_Q,state)
     
     with tab3:
         T_method=st.radio("Select the Method!",["TOP INSURANCE ANALYSIS","TOP TRANSACTION ANALYSIS","TOP USER ANALYSIS"])
 
         if T_method=="TOP INSURANCE ANALYSIS":
-            pass
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every State!")
+                years1=st.slider("Select a year to Analyse!!", Top_Insurance['Years'].min(), Top_Insurance['Years'].max(), Top_Insurance['Years'].min())
+            Top_Ins_Y=Top_UC_TA_Y(Top_Insurance,years1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Quarter Wise Transaction Amount & User Count Analysis on Every District!")
+                quarters=st.slider("Select a Quarter to Analyse!!", Top_Ins_Y['Quarter'].min(), Top_Ins_Y['Quarter'].max(), Top_Ins_Y['Quarter'].min())
+            Top_UC_TA_Q(Top_Ins_Y,quarters)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Pincode Wise Transaction Amount & User Count Analysis on Every State!")
+                state=st.selectbox("Select a State to Analyse the Year! ", Top_Ins_Y['States'].unique().tolist())
+            Top_Ins_Pin_Y=Top_Pin_UC_TA_Y(Top_Ins_Y,state)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every District!")
+                quarters1=st.slider("Select a Quarter to Analyse the Pincode wise data!!", Top_Ins_Pin_Y['Quarter'].min(), Top_Ins_Pin_Y['Quarter'].max(), Top_Ins_Pin_Y['Quarter'].min())
+            Top_Pin_UC_TA_Q(Top_Ins_Pin_Y,quarters1)
+
 
         elif T_method=="TOP TRANSACTION ANALYSIS":
-            pass
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every State!")
+                years1=st.slider("Select a year to Analyse the states !!", Top_Transaction['Years'].min(), Top_Transaction['Years'].max(), Top_Transaction['Years'].min())
+            Top_Tran_Y=Top_UC_TA_Y(Top_Transaction,years1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Quarter Wise Transaction Amount & User Count Analysis on Every District!")
+                quarters=st.slider("Select a Quarter to Analyse !!", Top_Tran_Y['Quarter'].min(), Top_Tran_Y['Quarter'].max(), Top_Tran_Y['Quarter'].min())
+            Top_UC_TA_Q(Top_Tran_Y,quarters)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Pincode Wise Transaction Amount & User Count Analysis on Every State!")
+                state=st.selectbox("Select a State to Analyse the Year ! ", Top_Tran_Y['States'].unique().tolist())
+            Top_Tran_Pin_Y=Top_Pin_UC_TA_Y(Top_Tran_Y,state)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Year Wise Transaction Amount & User Count Analysis on Every District!")
+                quarters1=st.slider("Select a Quarter to Analyse the Pincode wise data !!", Top_Tran_Pin_Y['Quarter'].min(), Top_Tran_Pin_Y['Quarter'].max(), Top_Tran_Pin_Y['Quarter'].min())
+            Top_Pin_UC_TA_Q(Top_Tran_Pin_Y,quarters1)
 
         elif T_method=="TOP USER ANALYSIS":
-            pass
-    
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Year Wise Registered Users Count Analysis on Every State!")
+                years1=st.slider("Select a year to Analyse!!", Top_User['Years'].min(), Top_User['Years'].max(), Top_User['Years'].min())
+            Top_U_RU_Y=Top_User_RU_Y(Top_User,years1)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Quarter Wise Registered Users Count Analysis on Every District!")
+                quarters=st.slider("Select a Quarter to Analyse!!", Top_U_RU_Y['Quarter'].min(), Top_U_RU_Y['Quarter'].max(), Top_U_RU_Y['Quarter'].min())
+            Top_User_RU_Q(Top_U_RU_Y,quarters)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Pincode Wise Registered Users Count Analysis on Every State!")
+                state=st.selectbox("Select a State to Analyse the Year! ", Top_U_RU_Y['States'].unique().tolist())
+            Top_U_RU_Pin_Y=Top_User_Pin_Y(Top_U_RU_Y,state)
+
+            col1,col2=st.columns(2)
+            with col1:
+                Tcap=st.write("Year Wise Registered Users Count Analysis on Every District!")
+                quarters1=st.slider("Select a Quarter to Analyse the Pincode wise data!!", Top_U_RU_Pin_Y['Quarter'].min(), Top_U_RU_Pin_Y['Quarter'].max(), Top_U_RU_Pin_Y['Quarter'].min())
+            Top_User_Pin_Q(Top_U_RU_Pin_Y,quarters1)
+            
 elif select=="TOP CHARTS":
     pass
