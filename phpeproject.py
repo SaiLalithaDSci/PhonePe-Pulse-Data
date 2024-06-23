@@ -640,12 +640,77 @@ def Top_User_Pin_Q(df,quarter):
                 title=f"QUARTER {quarter}, PINCODE WISE REGISTERED USERS COUNT", color_discrete_sequence=px.colors.sequential.Rainbow_r)
     st.plotly_chart(Tfig1)
 
+def Trend_Line_Y(df,state):
+
+    trend1=df[df['States']==state]
+    trend1.reset_index(drop=True,inplace=True)
+
+    trend1G=trend1.groupby('Years')[['Transaction_Count','Transaction_Amount']].sum()
+    trend1G.reset_index(inplace=True)
+    trend1G['Years'] = trend1G['Years'].astype(str)
+
+    fig1=px.scatter(data_frame=trend1G, x="Years", y="Transaction_Count", trendline="ols", 
+                    color="Transaction_Count", color_continuous_scale="Rainbow", title=f"TREND LINE OF TRANSACTION COUNT OF {state} OVER THE YEARS")
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2=px.scatter(data_frame=trend1G, x="Years", y="Transaction_Amount", trendline="ols", 
+                    color="Transaction_Amount", color_continuous_scale="Rainbow", title=f"TREND LINE OF TRANSACTION AMOUNT OF {state} OVER THE YEARS")
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+    return trend1
+
+def Trend_Line_Q(df,year):
+
+    trend2=df[df['Years']==year]
+    trend2.reset_index(drop=True,inplace=True)
+
+    trend2G=trend2.groupby('Quarter')[['Transaction_Count','Transaction_Amount']].sum()
+    trend2G.reset_index(inplace=True)
+    trend2G['Quarter'] = trend2G['Quarter'].astype(str)
+
+    fig1=px.scatter(data_frame=trend2G, x="Quarter", y="Transaction_Count", trendline="ols", 
+                    color="Transaction_Count", color_continuous_scale="Rainbow", title=f"TREND LINE OF TRANSACTION COUNT OVER THE QUARTERS OF {year}")
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2=px.scatter(data_frame=trend2G, x="Quarter", y="Transaction_Amount", trendline="ols", 
+                    color="Transaction_Amount", color_continuous_scale="Rainbow", title=f"TREND LINE OF TRANSACTION AMOUNT OVER THE QUARTERS OF {year}")
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+def TranType_All_Trend_Y(df,state):
+    trend4 = df[df['States'] == state]
+
+    trend4G = trend4.groupby(['Years', 'Transaction_Type'])[['Transaction_Amount']].sum().reset_index()
+    
+    fig1 = px.line(trend4G, x='Years', y='Transaction_Amount', color='Transaction_Type', 
+                   color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                   title=f"TREND OF TRANSACTION AMOUNTS BY TYPE IN {state.upper()}",
+                   labels={"Transaction_Amount": "Total Transaction Amount"},
+                   markers=True)
+    
+    fig1.update_traces(mode='markers+lines')
+
+    for i, row in trend4G.iterrows():
+        fig1.add_annotation(
+            x=row['Years'], 
+            y=row['Transaction_Amount'], 
+            text=f"{row['Transaction_Amount']}",
+            showarrow=True,
+            arrowhead=2,
+            ax=20,
+            ay=-30)
+    fig1.update_layout(yaxis_type="log")
+    
+    st.plotly_chart(fig1)
 
 #streamlit code
 st.set_page_config(layout ="wide")
 st.title("PHONEPE DATA VISUALIZATION")
 with st.sidebar:
-    select=option_menu("CONTENTS",["HOME","DATA EXPLORATION","TOP CHARTS"])
+    select=option_menu("CONTENTS",["HOME","DATA EXPLORATION","TREND CHARTS"])
 
 if select =="HOME":
     Htab1,Htab2,Htab3,Htab4=st.tabs(["ABOUT","PHONPE","DATA ANALYSIS","DATA VISUALIZATION"])
@@ -976,5 +1041,46 @@ elif select =="DATA EXPLORATION":
                 quarters1=st.slider("Select a Quarter to Analyse the Pincode wise data!!", Top_U_RU_Pin_Y['Quarter'].min(), Top_U_RU_Pin_Y['Quarter'].max(), Top_U_RU_Pin_Y['Quarter'].min())
             Top_User_Pin_Q(Top_U_RU_Pin_Y,quarters1)
             
-elif select=="TOP CHARTS":
-    pass
+elif select=="TREND CHARTS":
+    tab1,tab2,tab3=st.tabs(['INSURANCE','TRANSACTION','USER'])
+
+    with tab1:
+        type=st.radio('Select a Type!', ['Aggregated','Map','Top'])
+
+        if type=='Aggregated':
+            Tnhead=st.subheader("AGGREGATED INSURANCE YEARLY TREND")
+            state=st.selectbox("Select a State to Analyse the Year! ", Aggregated_Insurance['States'].unique().tolist())
+            Agg_trend_Y=Trend_Line_Y(Aggregated_Insurance,state)
+            st.markdown("")
+            Tnhead=st.subheader("AGGREGATED INSURANCE QUARTERLY TREND")
+            years1=st.slider("Select a year to Analyse the Trend!!", Agg_trend_Y['Years'].min(), Agg_trend_Y['Years'].max(), Agg_trend_Y['Years'].min())
+            Trend_Line_Q(Agg_trend_Y,years1)
+
+        elif type=='Map':
+            pass
+
+        elif type=='Top':
+            pass
+
+    with tab2:
+        type=st.radio('Select a Type!', ['Aggregated ','Map ','Top '])
+
+        if type=='Aggregated ':
+            Tnhead=st.subheader("AGGREGATED TRANSACTION YEARLY TREND")
+            state=st.selectbox("Select a State to Analyse the Year!!!", Aggregated_Transaction['States'].unique().tolist())
+            Agg_trend_Y=Trend_Line_Y(Aggregated_Transaction,state)
+            st.markdown("")
+            Tnhead=st.subheader("AGGREGATED TRANSACTION QUARTERLY TREND")
+            years1=st.slider("Select a year to Analyse the Trend!", Agg_trend_Y['Years'].min(), Agg_trend_Y['Years'].max(), Agg_trend_Y['Years'].min())
+            Trend_Line_Q(Agg_trend_Y,years1)
+            st.markdown("")
+            Tnhead=st.subheader("AGGREGATED TRANSACTION TYPES YEARLY TREND")
+            state=st.selectbox("Select a State to Analyse for all the Years!!!", Aggregated_Transaction['States'].unique().tolist())
+            TranType_All_Trend_Y(Aggregated_Transaction,state)
+
+
+        elif type=='Map':
+            pass
+
+        elif type=='Top':
+            pass
