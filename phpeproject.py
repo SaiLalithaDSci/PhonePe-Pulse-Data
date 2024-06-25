@@ -706,11 +706,260 @@ def TranType_All_Trend_Y(df,state):
     
     st.plotly_chart(fig1)
 
+def Dist_Trend_Y(df,state):
+
+    trend5=df[df['States']==state]
+    trend5.reset_index(drop=True,inplace=True)
+
+    trend5G=trend5.groupby(['Years','Districts'])[['User_Count','Transaction_Amount']].sum()
+    trend5G.reset_index(inplace=True)
+
+    fig1 = px.line(trend5G, x='Years', y='Transaction_Amount', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF TRANSACTION AMOUNTS IN DISTRICTS OF {state.upper()}",
+                    labels={"Transaction_Amount": "Total Transaction Amount"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2 = px.line(trend5G, x='Years', y='User_Count', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USER COUNTS IN DISTRICTS OF {state.upper()}",
+                    labels={"User_Count": "Total User Count"},
+                    markers=True)
+
+    fig2.update_traces(mode='markers+lines')
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+    return trend5
+
+def Dist_Trend_Q(df,year):
+
+    trend6=df[df['Years']==year]
+    trend6.reset_index(drop=True,inplace=True)
+
+    trend6G=trend6.groupby(['Quarter','Districts'])[['User_Count','Transaction_Amount']].sum()
+    trend6G.reset_index(inplace=True)
+
+    fig1 = px.line(trend6G, x='Quarter', y='Transaction_Amount', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF TRANSACTION AMOUNTS IN DISTRICTS",
+                    labels={"Transaction_Amount": "Total Transaction Amount"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2 = px.line(trend6G, x='Quarter', y='User_Count', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USER COUNTS IN DISTRICTS",
+                    labels={"User_Count": "Total User Count"},
+                    markers=True)
+
+    fig2.update_traces(mode='markers+lines')
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+def Pin_Trend_Y(df,state):
+
+    trend7=df[df['States']==state]
+    trend7.reset_index(drop=True,inplace=True)
+
+    trend7G=trend7.groupby(['Years','Pincodes'])[['User_Count','Transaction_Amount']].sum()
+    trend7G.reset_index(inplace=True)
+
+    fig1 = px.line(trend7G, x='Years', y='Transaction_Amount', color='Pincodes', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF TRANSACTION AMOUNTS IN PINCODES OF {state.upper()}",
+                    labels={"Transaction_Amount": "Total Transaction Amount"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2 = px.line(trend7G, x='Years', y='User_Count', color='Pincodes', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USER COUNTS IN PINCODES OF {state.upper()}",
+                    labels={"User_Count": "Total User Count"},
+                    markers=True)
+
+    fig2.update_traces(mode='markers+lines')
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+    return trend7
+
+def Pin_Trend_Q(df,year):
+
+    trend8=df[df['Years']==year]
+    trend8.reset_index(drop=True,inplace=True)
+
+    trend8G=trend8.groupby(['Quarter','Pincodes'])[['User_Count','Transaction_Amount']].sum()
+    trend8G.reset_index(inplace=True)
+
+    fig1 = px.line(trend8G, x='Quarter', y='Transaction_Amount', color='Pincodes', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF TRANSACTION AMOUNTS IN PINCODES",
+                    labels={"Transaction_Amount": "Total Transaction Amount"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2 = px.line(trend8G, x='Quarter', y='User_Count', color='Pincodes', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USER COUNTS IN PINCODES",
+                    labels={"User_Count": "Total User Count"},
+                    markers=True)
+
+    fig2.update_traces(mode='markers+lines')
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+def User_Brand_Trend_Y(df,state):
+
+    trend9=df[df['States']==state]
+    trend9.reset_index(drop=True,inplace=True)
+
+    trend9G=trend9.groupby(['Years','Brand_Name'])[['User_Count']].sum()
+    trend9G.reset_index(inplace=True)
+
+    fig1=px.line(trend9G, x='Years', y='User_Count', color='Brand_Name', 
+                        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                        title=f"TREND OF USER COUNTS OF PHONEPE IN DIFFERENT PHONE BRANDS IN {state.upper()}",
+                        labels={"User_Count": "Total User Count"},
+                        markers=True)
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    return trend9
+
+def User_Brand_Trend_Q(df,year):
+
+    trend10=df[df['Years']==year]
+    trend10.reset_index(drop=True,inplace=True)
+
+    trend10G=trend10.groupby(['Quarter','Brand_Name'])[['User_Count']].sum()
+    trend10G.reset_index(inplace=True)
+
+    fig1=px.line(trend10G, x='Quarter', y='User_Count', color='Brand_Name', 
+                        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                        title=f"TREND OF USER COUNTS OF PHONEPE IN DIFFERENT PHONE BRANDS IN {state.upper()}",
+                        labels={"User_Count": "Total User Count"},
+                        markers=True)
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+def User_Dist_Y(df,state):
+
+    trend11=df[df['States']==state]
+    trend11.reset_index(drop=True,inplace=True)
+
+    trend11G=trend11.groupby(['Years','Districts'])[['User_Count','App_Opens']].sum()
+    trend11G.reset_index(inplace=True)
+
+    fig1 = px.line(trend11G, x='Years', y='App_Opens', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF APP OPENS IN DISTRICTS OF {state.upper()}",
+                    labels={"Transaction_Amount": "Total Transaction Amount"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2 = px.line(trend11G, x='Years', y='User_Count', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USER COUNTS IN DISTRICTS OF {state.upper()}",
+                    labels={"User_Count": "Total User Count"},
+                    markers=True)
+
+    fig2.update_traces(mode='markers+lines')
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+    return trend11
+
+def User_Dist_Q(df,year):
+
+    trend12=df[df['Years']==year]
+    trend12.reset_index(drop=True,inplace=True)
+
+    trend12G=trend12.groupby(['Quarter','Districts'])[['User_Count','App_Opens']].sum()
+    trend12G.reset_index(inplace=True)
+
+    fig1 = px.line(trend12G, x='Quarter', y='App_Opens', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF APP OPENS IN DISTRICTS IN {year}",
+                    labels={"Transaction_Amount": "Total Transaction Amount"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    fig2 = px.line(trend12G, x='Quarter', y='User_Count', color='Districts', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USER COUNTS IN DISTRICTS IN {year}",
+                    labels={"User_Count": "Total User Count"},
+                    markers=True)
+
+    fig2.update_traces(mode='markers+lines')
+    fig2.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig2)
+
+def User_Pin_Y(df,state):
+
+    trend13=df[df['States']==state]
+    trend13.reset_index(drop=True,inplace=True)
+
+    trend13G=trend13.groupby(['Years','Pincodes'])[['Pincode_Wise_Registered_Users']].sum()
+    trend13G.reset_index(inplace=True)
+
+    fig1 = px.line(trend13G, x='Years', y='Pincode_Wise_Registered_Users', color='Pincodes', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USERS IN PINCODES OF {state.upper()}",
+                    labels={"Pincode_Wise_Registered_Users": "Total Users"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+    return trend13
+
+def User_Pin_Q(df,year):
+
+    trend14=df[df['Years']==year]
+    trend14.reset_index(drop=True,inplace=True)
+
+    trend14G=trend14.groupby(['Quarter','Pincodes'])[['Pincode_Wise_Registered_Users']].sum()
+    trend14G.reset_index(inplace=True)
+
+    fig1 = px.line(trend14G, x='Quarter', y='Pincode_Wise_Registered_Users', color='Pincodes', 
+                    color_discrete_sequence=px.colors.sequential.Rainbow_r,
+                    title=f"TREND OF USERS IN PINCODES IN {year}",
+                    labels={"Pincode_Wise_Registered_Users": "Total Users"},
+                    markers=True)
+
+    fig1.update_traces(mode='markers+lines')
+    fig1.update_layout(xaxis=dict(type='category'))
+    st.plotly_chart(fig1)
+
+
 #streamlit code
 st.set_page_config(layout ="wide")
 st.title("PHONEPE DATA VISUALIZATION")
 with st.sidebar:
-    select=option_menu("CONTENTS",["HOME","DATA EXPLORATION","TREND CHARTS"])
+    select=option_menu("CONTENTS",["HOME","DATA EXPLORATION","TREND CHARTS","TOP CHARTS"])
 
 if select =="HOME":
     Htab1,Htab2,Htab3,Htab4=st.tabs(["ABOUT","PHONPE","DATA ANALYSIS","DATA VISUALIZATION"])
@@ -1057,10 +1306,22 @@ elif select=="TREND CHARTS":
             Trend_Line_Q(Agg_trend_Y,years1)
 
         elif type=='Map':
-            pass
+            Tnhead=st.subheader("MAP INSURANCE YEARLY TREND")
+            state=st.selectbox("Select a State to Analyse the Year ! ", Map_Insurance['States'].unique().tolist())
+            DistTrendY=Dist_Trend_Y(Map_Insurance,state)
+            st.markdown("")
+            Tnhead=st.subheader("MAP INSURANCE QUARTERLY TREND")
+            years1=st.slider("Select a year to Analyse the Trend !!", DistTrendY['Years'].min(), DistTrendY['Years'].max(), DistTrendY['Years'].min())
+            Dist_Trend_Q(DistTrendY,years1)
 
         elif type=='Top':
-            pass
+            Tnhead=st.subheader("TOP INSURANCE YEARLY TREND")
+            state=st.selectbox(" Select a State to Analyse the Year ! ", Top_Insurance['States'].unique().tolist())
+            PinTrendY=Pin_Trend_Y(Top_Insurance,state)
+            st.markdown("")
+            Tnhead=st.subheader("TOP INSURANCE QUARTERLY TREND")
+            years1=st.slider(" Select a year to Analyse the Trend !!", PinTrendY['Years'].min(), PinTrendY['Years'].max(), PinTrendY['Years'].min())
+            Pin_Trend_Q(PinTrendY,years1)
 
     with tab2:
         type=st.radio('Select a Type!', ['Aggregated ','Map ','Top '])
@@ -1079,8 +1340,53 @@ elif select=="TREND CHARTS":
             TranType_All_Trend_Y(Aggregated_Transaction,state)
 
 
-        elif type=='Map':
-            pass
+        elif type=='Map ':
+            Tnhead=st.subheader("MAP TRANSACTION YEARLY TREND")
+            state=st.selectbox("Select a State to Analyse the Years ! ", Map_Transaction['States'].unique().tolist())
+            DistTrendY=Dist_Trend_Y(Map_Transaction,state)
+            st.markdown("")
+            Tnhead=st.subheader("MAP TRANSACTION QUARTERLY TREND")
+            years1=st.slider("Select a year to Analyse The Trend !!", DistTrendY['Years'].min(), DistTrendY['Years'].max(), DistTrendY['Years'].min())
+            Dist_Trend_Q(DistTrendY,years1)
 
-        elif type=='Top':
-            pass
+        elif type=='Top ':
+            Tnhead=st.subheader("TOP TRANSACTION YEARLY TREND")
+            state=st.selectbox(" Select a State to Analyse the Years !  ", Top_Transaction['States'].unique().tolist())
+            PinTrendY=Pin_Trend_Y(Top_Transaction,state)
+            st.markdown("")
+            Tnhead=st.subheader("TOP TRANSACTION QUARTERLY TREND")
+            years1=st.slider("Select a year to Analyse The Trend !! ", PinTrendY['Years'].min(), PinTrendY['Years'].max(), PinTrendY['Years'].min())
+            Pin_Trend_Q(PinTrendY,years1)
+
+    with tab3:
+        type=st.radio('Select a Type! ', [' Aggregated ',' Map ',' Top '])
+
+        if type==' Aggregated ':
+            Tnhead=st.subheader("AGGREGATED USER YEARLY TREND")
+            state=st.selectbox(" Select a State to Analyse the Years !   ", Aggregated_User['States'].unique().tolist())
+            UserBrandTrendY=User_Brand_Trend_Y(Aggregated_User,state)
+            st.markdown("")
+            Tnhead=st.subheader("AGGREGATED USER QUARTERLY TREND")
+            years1=st.slider("Select a year to Analyse The Trend !!  ", UserBrandTrendY['Years'].min(), UserBrandTrendY['Years'].max(), UserBrandTrendY['Years'].min())
+            User_Brand_Trend_Q(UserBrandTrendY,years1)
+
+        elif type==' Map ':
+            Tnhead=st.subheader("MAP USER YEARLY TREND")
+            state=st.selectbox("  Select a State to Analyse the Years !   ", Map_User['States'].unique().tolist())
+            UserDistY=User_Dist_Y(Map_User,state)
+            st.markdown("")
+            Tnhead=st.subheader("MAP USER QUARTERLY TREND")
+            years1=st.slider(" Select a year to Analyse The Trend !!  ", UserDistY['Years'].min(), UserDistY['Years'].max(), UserDistY['Years'].min())
+            User_Dist_Q(UserDistY,years1)
+
+        elif type==' Top ':
+            Tnhead=st.subheader("TOP USER YEARLY TREND")
+            state=st.selectbox("  Select a State to Analyse the Years  !   ", Top_User['States'].unique().tolist())
+            UserPinY=User_Pin_Y(Top_User,state)
+            st.markdown("")
+            Tnhead=st.subheader("MAP USER QUARTERLY TREND")
+            years1=st.slider(" Select a year to Analyse The Trend !!   ", UserPinY['Years'].min(), UserPinY['Years'].max(), UserPinY['Years'].min())
+            User_Pin_Q(UserPinY,years1)
+
+elif select=="TOP CHARTS":
+    pass
