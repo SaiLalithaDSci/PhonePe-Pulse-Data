@@ -12,7 +12,7 @@ import json
 #SQL Connection
 my_db=psycopg2.connect(host='localhost',
                         user='postgres',
-                        password='sailalitha',
+                        password='password',
                         database='PhonePe_Data',
                         port='5432')
 cursor=my_db.cursor()
