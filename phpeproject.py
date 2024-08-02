@@ -954,6 +954,170 @@ def User_Pin_Q(df,year):
     fig1.update_layout(xaxis=dict(type='category'))
     st.plotly_chart(fig1)
 
+def top_chart_fig1(df):
+
+    top_states_transaction_year = df.groupby(['States', 'Years'])['Transaction_Amount'].sum().reset_index()
+    top_states_transaction_year = top_states_transaction_year.groupby('States')['Transaction_Amount'].sum().nlargest(10).reset_index()
+
+    fig1 = px.bar(
+        top_states_transaction_year,
+        x='States',
+        y='Transaction_Amount',
+        color='States',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        barmode='group',
+        labels={'States': 'State', 'Transaction_Amount': 'Transaction Amount', 'Years': 'Year'},
+        title="Top 10 States by Transaction Amount Over Years"
+    )
+    st.plotly_chart(fig1)
+
+def top_chart_fig2(df):
+    top_states_users_year = df.groupby(['States', 'Years'])['User_Count'].sum().reset_index()
+    top_states_users_year = top_states_users_year.groupby('States')['User_Count'].sum().nlargest(10).reset_index()
+
+    fig2 = px.bar(
+        top_states_users_year,
+        x='States',
+        y='User_Count',
+        color='States',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        barmode='group',
+        labels={'States': 'State', 'User_Count': 'User Count', 'Years': 'Year'},
+        title="Top 10 States by User Registrations Over Years"
+    )
+
+    st.plotly_chart(fig2)
+
+def top_chart_fig3(df):
+    top_transaction_types_year = df.groupby(['States', 'Transaction_Type', 'Years'])['Transaction_Count'].sum().reset_index()
+    top_transaction_types_year = top_transaction_types_year.groupby(['Transaction_Type'])['Transaction_Count'].sum().nlargest(5).reset_index()
+
+    fig3 = px.pie(
+        top_transaction_types_year,
+        names='Transaction_Type',
+        values='Transaction_Count',
+        color='Transaction_Type',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        hole=0.35,
+        labels={'Transaction_Type': 'Transaction Type', 'Transaction_Count': 'Transaction Count', 'Years': 'Year'},
+        title="Top 5 Transaction Types by Count Over Years"
+    )
+    st.plotly_chart(fig3)
+
+def top_chart_fig4(df):
+
+    top_pincodes_transaction_year = df.groupby(['States', 'Pincodes', 'Years'])['Transaction_Amount'].sum().reset_index()
+    top_pincodes_transaction_year = top_pincodes_transaction_year.groupby(['Pincodes', 'States'])['Transaction_Amount'].sum().nlargest(10).reset_index()
+
+    fig4 = px.pie(
+        top_pincodes_transaction_year,
+        names='Pincodes',
+        values='Transaction_Amount',
+        color='Pincodes',
+        hover_name='States',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        labels={'Pincodes': 'Pincode', 'Transaction_Amount': 'Transaction Amount', 'Years': 'Year'},
+        title="Top 10 Pincodes by Transaction Amount Over Years"
+    )
+
+    st.plotly_chart(fig4)
+
+def top_chart_fig5(df):
+    top_brands_users_year = df.groupby(['Brand_Name', 'Years'])['User_Percentage'].max().reset_index()
+    top_brands_users_year = top_brands_users_year.groupby('Brand_Name')['User_Percentage'].sum().nlargest(5).reset_index()
+
+    fig5 = px.bar(
+        top_brands_users_year,
+        x='Brand_Name',
+        y='User_Percentage',
+        color='Brand_Name',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        barmode='group',
+        labels={'Brand_Name': 'Brand Name', 'User_Percentage': 'User Percentage', 'Years': 'Year'},
+        title="Top 5 Brands by User Percentage Over Years")
+    st.plotly_chart(fig5)
+
+def top_chart_fig6(df):
+    top_states_insurance_year = df.groupby(['States', 'Years'])['Transaction_Amount'].sum().reset_index()
+    top_states_insurance_year = top_states_insurance_year.groupby('States')['Transaction_Amount'].sum().nlargest(10).reset_index()
+
+    fig6 = px.bar(
+        top_states_insurance_year,
+        x='States',
+        y='Transaction_Amount',
+        color='States',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        barmode='group',
+        labels={'States': 'State', 'Transaction_Amount': 'Transaction Amount', 'Years': 'Year'},
+        title="Top 10 States by Insurance Transaction Amount Over Years"
+    )
+    st.plotly_chart(fig6)
+
+def top_chart_fig7(df):
+    top_districts_app_opens_year = df.groupby(['Districts', 'Years'])['App_Opens'].sum().reset_index()
+    top_districts_app_opens_year = top_districts_app_opens_year.groupby('Districts')['App_Opens'].sum().nlargest(10).reset_index()
+
+    fig7 = px.bar(
+        top_districts_app_opens_year,
+        x='Districts',
+        y='App_Opens',
+        color='Districts',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        barmode='group',
+        labels={'Districts': 'District', 'App_Opens': 'App Opens', 'Years': 'Year'},
+        title="Top 10 Districts by App Opens Over Years"
+    )
+    st.plotly_chart(fig7)
+
+def top_chart_fig8(df):
+    top_quarters_users_year = df.groupby(['States', 'Quarter', 'Years'])['User_Count'].sum().reset_index()
+    top_quarters_users_year = top_quarters_users_year.groupby(['Quarter', 'States'])['User_Count'].sum().nlargest(10).reset_index()
+
+    fig8 = px.pie(
+        top_quarters_users_year,
+        names='Quarter',
+        values='User_Count',
+        color='Quarter',
+        hover_name='States',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        hole=0.35,
+        labels={'Quarter': 'Quarter', 'User_Count': 'User Count', 'Years': 'Year'},
+        title="Top 10 Quarters by User Registrations Over Years"
+    )
+    st.plotly_chart(fig8)
+
+def top_chart_fig9(df):
+    top_states_users_quarter_year = df.groupby(['States', 'Quarter', 'Years'])['User_Count'].sum().reset_index()
+    top_states_users_quarter_year = top_states_users_quarter_year.groupby(['States', 'Quarter'])['User_Count'].sum().nlargest(10).reset_index()
+
+    fig9 = px.bar(
+        top_states_users_quarter_year,
+        x='States',
+        y='User_Count',
+        color='Quarter',
+        color_continuous_scale=px.colors.sequential.Rainbow_r,
+        barmode='group',
+        labels={'States': 'State', 'User_Count': 'User Count', 'Years': 'Year'},
+        title="Top 10 States by Registered Users in a Quarter Over Years"
+    )
+    st.plotly_chart(fig9)
+
+def top_chart_fig10(df):
+    top_pincodes_users_year = df.groupby(['States', 'Pincodes', 'Years'])['Pincode_Wise_Registered_Users'].sum().reset_index()
+    top_pincodes_users_year = top_pincodes_users_year.groupby(['Pincodes', 'States'])['Pincode_Wise_Registered_Users'].sum().nlargest(10).reset_index()
+
+    fig10 = px.pie(
+        top_pincodes_users_year,
+        names='Pincodes',
+        values='Pincode_Wise_Registered_Users',
+        color='Pincodes',
+        hover_name='States',
+        color_discrete_sequence=px.colors.sequential.Rainbow_r,
+        hole=0.35,
+        labels={'Pincodes': 'Pincode', 'Pincode_Wise_Registered_Users': 'Registered Users', 'Years': 'Year'},
+        title="Top 10 Pincodes by Registered Users Over Years"
+    )
+    st.plotly_chart(fig10)
 
 #streamlit code
 st.set_page_config(layout ="wide")
@@ -1389,4 +1553,46 @@ elif select=="TREND CHARTS":
             User_Pin_Q(UserPinY,years1)
 
 elif select=="TOP CHARTS":
-    pass
+    select_options = ['1. Top 10 States by Transaction Amount Over Years',
+                      '2. Top 10 States by User Registrations Over Years',
+                      '3. Top 5 Transaction Types by Count Over Years',
+                      '4. Top 10 Pincodes by Transaction Amount Over Years',
+                      '5. Top 5 Brands by User Percentage Over Years',
+                      '6. Top 10 States by Insurance Transaction Amount Over Years',
+                      '7. Top 10 Districts by App Opens Over Years',
+                      '8. Top 10 Quarters by User Registrations Over Years',
+                      '9. Top 10 States by Registered Users in a Quarter Over Years',
+                      '10. Top 10 Pincodes by Registered Users Over Years']
+    select = st.selectbox('Select a Fact to view!', select_options)
+
+    if select == '1. Top 10 States by Transaction Amount Over Years':
+        top_chart_fig1(Aggregated_Transaction)
+    
+    elif select == '2. Top 10 States by User Registrations Over Years':
+        top_chart_fig2(Aggregated_User)
+
+    elif select == '3. Top 5 Transaction Types by Count Over Years':
+        top_chart_fig3(Aggregated_Transaction)
+
+    elif select == '4. Top 10 Pincodes by Transaction Amount Over Years':
+        top_chart_fig4(Top_Transaction)
+
+    elif select == '5. Top 5 Brands by User Percentage Over Years':
+        top_chart_fig5(Aggregated_User)
+
+    elif select == '6. Top 10 States by Insurance Transaction Amount Over Years':
+        top_chart_fig6(Aggregated_Insurance)
+
+    elif select == '7. Top 10 Districts by App Opens Over Years':
+        top_chart_fig7(Map_User)
+
+    elif select == '8. Top 10 Quarters by User Registrations Over Years':
+        top_chart_fig8(Aggregated_User)
+
+    elif select == '9. Top 10 States by Registered Users in a Quarter Over Years':
+        top_chart_fig9(Aggregated_User)
+
+    elif select == '10. Top 10 Pincodes by Registered Users Over Years':
+        top_chart_fig10(Top_User)
+
+################### COMPLETED ######################
